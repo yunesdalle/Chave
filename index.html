@@ -253,11 +253,11 @@ function gerarImagem(){
 function carregar(){
   try{ const s = JSON.parse(localStorage.getItem("chave-stats")); if(s) stats = Object.assign(stats,s); }catch(e){}
   try{ const c = JSON.parse(localStorage.getItem("chave-cfg")); if(c) cfg = Object.assign(cfg,c); }catch(e){}
-  try{ const d = JSON.parse(localStorage.getItem(chaveDia)); if(d){ tent = d.tent; fim = d.fim; venceu = d.venceu; } }catch(e){}
+  try{ const d = JSON.parse(localStorage.getItem(chaveDia)); if(d && d.alvo===alvo){ tent = d.tent; fim = d.fim; venceu = d.venceu; } }catch(e){}
   if(stats.s>0 && stats.last<dia-1) stats.s=0;
 }
 function salvar(){
-  try{ localStorage.setItem(chaveDia, JSON.stringify({tent,fim,venceu})); localStorage.setItem("chave-stats", JSON.stringify(stats)); }catch(e){}
+  try{ localStorage.setItem(chaveDia, JSON.stringify({tent,fim,venceu,alvo})); localStorage.setItem("chave-stats", JSON.stringify(stats)); }catch(e){}
 }
 
 function montar(){
