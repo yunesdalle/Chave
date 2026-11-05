@@ -61,7 +61,7 @@ dialog p{margin:8px 0;line-height:1.45;color:var(--muted)}
 .ex{display:flex;gap:4px;margin:10px 0 4px}
 .ex .tile{width:38px;font-size:1.2rem}
 .cta{margin-top:14px;background:var(--accent);color:#16262b;border:0;border-radius:8px;padding:10px 16px;font-weight:700;cursor:pointer;font-size:1rem}
-.stats{display:flex;gap:18px;margin:12px 0}.stats div{text-align:center}.stats b{display:block;font-size:1.5rem;color:var(--text)}.stats span{font-size:.78rem;color:var(--muted)}
+.stats{display:flex;gap:12px;margin:12px 0}.stats div{text-align:center}.stats b{display:block;font-size:1.5rem;color:var(--text)}.stats span{font-size:.78rem;color:var(--muted)}
 .close{float:right;background:none;border:0;color:var(--muted);font-size:1.4rem;cursor:pointer}
 
 #winArt{display:flex;justify-content:center;margin:6px 0 4px}
@@ -89,6 +89,8 @@ dialog h3{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:v
 .bar{display:flex;align-items:center;gap:8px;margin:3px 0;font-size:.85rem}.bar span{width:12px;color:var(--muted)}
 .bar i{display:block;height:20px;border-radius:4px;background:var(--line)}.bar i.hoje{background:var(--ok)}.bar b{font-weight:600}
 .tile{cursor:pointer}.tile.sel{box-shadow:0 0 0 2px var(--accent)}
+#saldo{font-size:.85rem;color:var(--muted)}#saldo[hidden]{display:none}
+.shr{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.shr[hidden]{display:none}.shr .cta{margin-top:0;flex:1}
 #modo{display:flex;gap:6px}#modo[hidden]{display:none}
 #modo button{background:none;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:5px 16px;font-size:.85rem;cursor:pointer}
 #modo button.on{background:var(--accent);border-color:var(--accent);color:#16262b;font-weight:700}
@@ -107,6 +109,7 @@ dialog h3{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:v
   <div style="display:flex;gap:6px"><button class="hbtn" id="btnCfg">Opções</button><button class="hbtn" id="btnStats" aria-label="Estatísticas">Placar</button></div>
 </header>
 <main>
+  <div id="saldo"></div>
   <div id="modo" hidden><button data-m="chave">Chave</button><button data-m="desafio">Desafio</button></div>
   <div id="board" aria-label="Tabuleiro"></div>
   <div id="kb"></div>
@@ -123,6 +126,7 @@ dialog h3{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:v
   <p>Laranja: a letra existe na palavra, só que em outro lugar. Letra certa, posição errada.</p>
   <div class="ex"><div class="tile">f</div><div class="tile">r</div><div class="tile">u</div><div class="tile no">t</div><div class="tile">a</div></div>
   <p>Cinza: essa letra não aparece na palavra.</p>
+  <p>Chavinhas: ao acertar, você ganha uma para cada tentativa que sobrou. Com 15 chavinhas, dá para abrir uma 7ª tentativa quando as 6 acabarem. Acertar na 7ª não rende chavinhas.</p>
   <p>Você não precisa digitar acentos. O jogo coloca sozinho, e eles não mudam as cores. Uma mesma letra pode aparecer mais de uma vez. A palavra troca todo dia, então volte amanhã para um novo desafio.</p>
   <button class="cta" data-close>Jogar</button>
 </dialog>
@@ -159,12 +163,13 @@ dialog h3{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:v
     <div><b id="sV">0</b><span>vitórias</span></div>
     <div><b id="sS">0</b><span>sequência</span></div>
     <div><b id="sM">0</b><span>melhor</span></div>
+    <div><b id="sC">0</b><span>chavinhas</span></div>
   </div>
   <h3>Tentativas</h3><div id="sDist"></div>
   <div id="sFim" hidden><p class="cd">Próxima palavra em <b id="sCd">--:--:--</b></p><a id="sSig" class="lnk" target="_blank" rel="noopener">Ver significado da palavra</a></div>
   <h3>Chaves</h3><div id="sConq" class="cqg"></div>
   <p id="sDes"></p>
-  <button class="cta" id="btnShare" hidden>Compartilhar resultado</button>
+  <div class="shr" id="btnShare" hidden><button class="cta" data-s="wa">WhatsApp</button><button class="cta" data-s="ig">Instagram</button><button class="cta" data-s="mais">Mais</button></div>
 </dialog>
 <dialog id="dLose">
   <button class="close" data-close aria-label="Fechar">&times;</button>
@@ -172,7 +177,7 @@ dialog h3{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:v
   <div id="loseArt"><svg viewBox="0 0 160 150" role="img" aria-label="Cadeado fechado"><path d="M52 64V46a28 28 0 0 1 56 0v18" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/><rect x="38" y="62" width="84" height="76" rx="12" fill="currentColor"/><circle cx="80" cy="94" r="9" fill="#16262b"/><rect x="76.5" y="96" width="7" height="20" rx="3" fill="#16262b"/></svg></div>
   <p id="loseMsg"></p>
   <a id="loseSig" class="lnk" target="_blank" rel="noopener">Ver significado da palavra</a><br>
-  <button class="cta" id="btnLose">Ver placar</button>
+  <button class="cta" id="btnLose">Ver placar</button><button class="cta" id="btnBuy" hidden></button> <button class="hbtn" id="btnGive" hidden>Desistir</button>
 </dialog>
 <dialog id="dCfg">
   <button class="close" data-close aria-label="Fechar">&times;</button>
@@ -208,8 +213,8 @@ let chaveDia = "chave-" + hoje.getFullYear() + "-" + (hoje.getMonth()+1) + "-" +
 
 const $ = id => document.getElementById(id);
 const board = $("board"), kb = $("kb");
-let tent = [], slots = ["","","","",""], sel = -1, fim = false, venceu = false;
-let stats = {j:0,v:0,s:0,m:0,d:[0,0,0,0,0,0],last:-1,conq:{},des:{j:0,v:0}};
+let tent = [], slots = ["","","","",""], sel = -1, fim = false, venceu = false, extra = 0, ganho = 0;
+let stats = {j:0,v:0,s:0,m:0,d:[0,0,0,0,0,0,0],ch:0,last:-1,conq:{},des:{j:0,v:0}};
 let cfg = {dificil:false,claro:false,alto:false}, novasConq = [], desafioNovo = false;
 const CONQ=[
  {id:"primeira",n:"Primeira chave",d:"Acerte uma palavra",t:()=>stats.v>=1},
@@ -264,11 +269,12 @@ function gerarImagem(){
 function carregar(){
   try{ const s = JSON.parse(localStorage.getItem("chave-stats")); if(s) stats = Object.assign(stats,s); }catch(e){}
   try{ const c = JSON.parse(localStorage.getItem("chave-cfg")); if(c) cfg = Object.assign(cfg,c); }catch(e){}
-  try{ const d = JSON.parse(localStorage.getItem(chaveDia)); if(d && d.alvo===alvo){ tent = d.tent; fim = d.fim; venceu = d.venceu; } }catch(e){}
+  try{ const d = JSON.parse(localStorage.getItem(chaveDia)); if(d && d.alvo===alvo){ tent = d.tent; fim = d.fim; venceu = d.venceu; extra = d.extra||0; if(extra) MAXT=7; } }catch(e){}
   if(stats.s>0 && stats.last<dia-1) stats.s=0;
+  while(stats.d.length<7) stats.d.push(0);
 }
 function salvar(){
-  try{ localStorage.setItem(chaveDia, JSON.stringify({tent,fim,venceu,alvo})); localStorage.setItem("chave-stats", JSON.stringify(stats)); }catch(e){}
+  try{ localStorage.setItem(chaveDia, JSON.stringify({tent,fim,venceu,alvo,extra})); localStorage.setItem("chave-stats", JSON.stringify(stats)); }catch(e){}
 }
 
 function montarTabuleiro(){
@@ -281,15 +287,42 @@ function montarTabuleiro(){
 }
 function selecionar(r,c){ if(fim||r!==tent.length) return; sel=(sel===c)?-1:c; desenharAtual(); }
 const todasChaves = () => CONQ.every(c=>stats.conq[c.id]);
+const CUSTO = 15;
+const pendente = () => MODO==="chave" && tent.length>=6 && !fim && !extra;
+function comprarSetima(){
+  if(stats.ch<CUSTO) return aviso("Faltam chavinhas");
+  stats.ch-=CUSTO; extra=1; MAXT=7; salvar(); $("dLose").close();
+  montarTabuleiro(); tent.forEach((p,i)=>pintarLinha(i,p,false)); teclado(); desenharAtual(); atualizarModo(); aviso("7ª tentativa aberta");
+}
+function desistir(){ $("dLose").close(); fim=true; venceu=false; stats.j++; stats.s=0; salvar(); atualizarModo(); abrirDerrota(); }
+function abrirPendente(){
+  $("loseMsg").textContent="As 6 tentativas acabaram. Você tem "+stats.ch+" chavinhas. Gastar "+CUSTO+" abre a 7ª tentativa, e acertar nela não rende chavinhas.";
+  $("btnBuy").textContent="Abrir a 7ª tentativa ("+CUSTO+" chavinhas)";
+  $("loseSig").hidden=true; $("btnLose").hidden=true; $("btnBuy").hidden=false; $("btnGive").hidden=false; $("dLose").showModal();
+}
+function baixar(blob){ const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="chave.png"; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000); }
+async function compartilhar(dest){
+  const t=textoShare()+"\n"+location.origin+location.pathname;
+  if(dest==="wa"){ window.open("https://wa.me/?text="+encodeURIComponent(t),"_blank","noopener"); return; }
+  try{
+    const blob=await gerarImagem(), f=new File([blob],"chave.png",{type:"image/png"});
+    if(navigator.canShare && navigator.canShare({files:[f]})){ await navigator.share(dest==="ig"?{files:[f]}:{files:[f],text:t}); return; }
+    if(dest==="ig"){ baixar(blob); aviso("Imagem salva. Publique no Instagram"); return; }
+    if(navigator.share){ await navigator.share({text:t}); return; }
+    await navigator.clipboard.writeText(t); aviso("Resultado copiado");
+  }catch(e){ if(e.name!=="AbortError") aviso("Não foi possível compartilhar"); }
+}
 function definirModo(m){
   MODO=m; N=m==="chave"?5:8; MAXT=m==="chave"?6:7;
   const L=m==="chave"?PALAVRAS:DESAFIOS;
   secreta=L[((dia%L.length)+L.length)%L.length]; alvo=norm(secreta);
   chaveDia="chave-"+hoje.getFullYear()+"-"+(hoje.getMonth()+1)+"-"+hoje.getDate()+(m==="chave"?"":"-d");
-  tent=[]; slots=Array(N).fill(""); sel=-1; fim=false; venceu=false;
+  tent=[]; slots=Array(N).fill(""); sel=-1; fim=false; venceu=false; extra=0;
 }
-function carregarDia(){ try{ const d=JSON.parse(localStorage.getItem(chaveDia)); if(d && d.alvo===alvo){ tent=d.tent; fim=d.fim; venceu=d.venceu; } }catch(e){} }
+function carregarDia(){ try{ const d=JSON.parse(localStorage.getItem(chaveDia)); if(d && d.alvo===alvo){ tent=d.tent; fim=d.fim; venceu=d.venceu; extra=d.extra||0; if(MODO==="chave"&&extra) MAXT=7; } }catch(e){} }
 function atualizarModo(){
+  const sd=$("saldo"); sd.hidden=MODO!=="chave";
+  sd.textContent=stats.ch+(stats.ch===1?" chavinha":" chavinhas")+(stats.ch>=CUSTO?" (7ª tentativa disponível)":" (a 7ª tentativa custa "+CUSTO+")");
   $("modo").hidden=!todasChaves();
   document.querySelectorAll("#modo button").forEach(b=>b.classList.toggle("on",b.dataset.m===MODO));
 }
@@ -297,7 +330,7 @@ function trocarModo(m){
   if(m===MODO || (m==="desafio" && !todasChaves())) return;
   definirModo(m); carregarDia(); montarTabuleiro();
   tent.forEach((p,i)=>pintarLinha(i,p,false)); teclado(); desenharAtual(); atualizarModo();
-  if(fim) setTimeout(abrirStats,300);
+  if(fim) setTimeout(abrirStats,300); else if(pendente()) setTimeout(abrirPendente,300);
 }
 function montar(){
   montarTabuleiro();
@@ -353,7 +386,7 @@ function desenharAtual(){
 function aviso(m){ const t=$("toast"); t.textContent=m; t.classList.add("on"); clearTimeout(aviso.id); aviso.id=setTimeout(()=>t.classList.remove("on"),1800); }
 
 function tecla(k){
-  if(fim) return;
+  if(fim || pendente()) return;
   if(k==="Enter") return enviar();
   if(k==="Backspace"){
     if(sel>=0 && slots[sel]) slots[sel]="";
@@ -378,12 +411,13 @@ function enviar(){
   tent.push(exibida); slots=Array(N).fill(""); sel=-1;
   const acertou = norm(exibida)===alvo;
   pintarLinha(i, exibida, true);
+  if(!acertou && MODO==="chave" && !extra && tent.length===6 && stats.ch>=CUSTO){ salvar(); setTimeout(()=>{ teclado(); abrirPendente(); },N*220+300); return; }
   if(acertou || tent.length===MAXT){
     fim = true; venceu = acertou;
     novasConq=[]; desafioNovo=false;
     if(MODO==="chave"){
       stats.j++;
-      if(acertou){ stats.v++; stats.s++; stats.last=dia; stats.m=Math.max(stats.m,stats.s); stats.d[tent.length-1]++; novasConq=checarConq(tent.length); } else stats.s=0;
+      if(acertou){ stats.v++; stats.s++; stats.last=dia; stats.m=Math.max(stats.m,stats.s); stats.d[tent.length-1]++; novasConq=checarConq(tent.length); ganho=0; if(!extra){ ganho=6-tent.length; stats.ch+=ganho; } } else stats.s=0;
       if(todasChaves() && !stats.desOk){ stats.desOk=1; desafioNovo=true; }
     } else { stats.des.j++; if(acertou) stats.des.v++; }
     setTimeout(()=>{ teclado(); aviso(acertou ? "Você acertou" : "A palavra era "+secreta.toUpperCase()); setTimeout(()=>{ acertou ? abrirVitoria() : abrirDerrota(); },1400); }, N*220+300);
@@ -392,15 +426,21 @@ function enviar(){
 }
 
 function abrirVitoria(){
-  $("winMsg").textContent = "Você abriu a palavra "+secreta.toUpperCase()+" em "+tent.length+" de "+MAXT+" tentativas."+(novasConq.length?" Nova chave: "+novasConq.map(c=>c.n).join(", ")+".":"")+(desafioNovo?" Você reuniu as 6 chaves. Desafio liberado: uma palavra grande, use o seletor acima do tabuleiro.":"");
+  $("winMsg").textContent = "Você abriu a palavra "+secreta.toUpperCase()+" em "+tent.length+" de "+MAXT+" tentativas."+(MODO==="chave"?(extra?" Na 7ª tentativa não há chavinhas.":" Você ganhou "+ganho+(ganho===1?" chavinha.":" chavinhas.")):"")+(novasConq.length?" Nova chave: "+novasConq.map(c=>c.n).join(", ")+".":"")+(desafioNovo?" Você reuniu as 6 chaves. Desafio liberado: uma palavra grande, use o seletor acima do tabuleiro.":"");
   $("winSig").href=linkSig(); $("dWin").showModal();
 }
 $("btnWin").addEventListener("click",()=>{ $("dWin").close(); abrirStats(); });
-function abrirDerrota(){ $("loseMsg").textContent="O cadeado continua fechado. A palavra era "+secreta.toUpperCase()+". Volte amanhã para uma nova chance."; $("loseSig").href=linkSig(); $("dLose").showModal(); }
+function abrirDerrota(){
+  const dica=(MODO==="chave" && !extra)?" Você tem "+stats.ch+" chavinhas, e a 7ª tentativa custa "+CUSTO+".":"";
+  $("loseMsg").textContent="O cadeado continua fechado. A palavra era "+secreta.toUpperCase()+"."+dica+" Volte amanhã.";
+  $("loseSig").hidden=false; $("btnLose").hidden=false; $("btnBuy").hidden=true; $("btnGive").hidden=true;
+  $("loseSig").href=linkSig(); $("dLose").showModal();
+}
+$("btnBuy").addEventListener("click",comprarSetima); $("btnGive").addEventListener("click",desistir);
 $("btnLose").addEventListener("click",()=>{ $("dLose").close(); abrirStats(); });
 
 function abrirStats(){
-  $("sJ").textContent=stats.j; $("sV").textContent=stats.v; $("sS").textContent=stats.s; $("sM").textContent=stats.m;
+  $("sJ").textContent=stats.j; $("sV").textContent=stats.v; $("sS").textContent=stats.s; $("sM").textContent=stats.m; $("sC").textContent=stats.ch;
   $("sMsg").textContent = !fim ? "Termine a palavra de hoje para ver o resultado." : venceu ? "Acertou em "+tent.length+" de "+MAXT+"." : "A palavra era "+secreta.toUpperCase()+".";
   const mx=Math.max(1,...stats.d);
   $("sDist").innerHTML=stats.d.map((n,i)=>'<div class="bar"><span>'+(i+1)+'</span><i class="'+(MODO==="chave"&&fim&&venceu&&tent.length===i+1?"hoje":"")+'" style="width:'+Math.max(6,n/mx*100)+'%"></i><b>'+n+'</b></div>').join("");
@@ -418,15 +458,7 @@ function textoShare(){
   return (MODO==="chave"?"Chave":"Chave Desafio")+" #"+n+" "+(venceu?tent.length:"X")+"/"+MAXT+"\n\n"+tent.map(p=>avaliar(norm(p)).map(x=>m[x]).join("")).join("\n");
 }
 
-$("btnShare").addEventListener("click", async ()=>{
-  const t=textoShare()+"\n"+location.origin+location.pathname;
-  try{
-    const blob=await gerarImagem(), f=new File([blob],"chave.png",{type:"image/png"});
-    if(navigator.canShare && navigator.canShare({files:[f]})){ await navigator.share({files:[f],text:t}); return; }
-    if(navigator.share){ await navigator.share({text:t}); return; }
-    await navigator.clipboard.writeText(t); aviso("Resultado copiado");
-  }catch(e){ if(e.name!=="AbortError") aviso("Não foi possível compartilhar"); }
-});
+document.querySelectorAll("#btnShare button").forEach(b=>b.addEventListener("click",()=>compartilhar(b.dataset.s)));
 document.querySelectorAll("#modo button").forEach(b=>b.addEventListener("click",()=>trocarModo(b.dataset.m)));
 $("btnCfg").addEventListener("click",()=>{ $("cDif").checked=cfg.dificil; $("cClaro").checked=cfg.claro; $("cAlto").checked=cfg.alto; $("dCfg").showModal(); });
 $("cDif").addEventListener("change",e=>{ if(tent.length>0&&!fim){ e.target.checked=cfg.dificil; return aviso("Só dá para mudar antes da primeira tentativa"); } cfg.dificil=e.target.checked; salvarCfg(); });
@@ -446,6 +478,7 @@ tent.forEach((p,i)=>pintarLinha(i,p,false));
 teclado(); desenharAtual();
 if(!tent.length && !localStorage.getItem("chave-visto")){ try{localStorage.setItem("chave-visto","1");}catch(e){} $("dHelp").showModal(); }
 if(fim) setTimeout(abrirStats,300);
+else if(pendente()) setTimeout(abrirPendente,400);
 else if(!tent.length && stats.s>0 && localStorage.getItem("chave-visto")) setTimeout(()=>aviso("Sequência de "+stats.s+(stats.s>1?" dias":" dia")+". Jogue hoje para mantê-la."),700);
 if("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
